@@ -6,9 +6,8 @@ class User:
 
 	def add_to_cart(self, product, quantity):
 		# TODO
-		# 1. Can't add an unknown product
-		# 2. Can't add more than available stock
-		# 3. Can't add if it doesn't have enough money to purchase
+		# 1. Can't add more than available stock
+		# 2. Can't add if it doesn't have enough money to purchase
 		current_stock = product.quantity
 
 		if current_stock == 0:
@@ -29,7 +28,6 @@ class User:
 		# TODO
 		# 1. Cannot remove more than what's currently in cart
 		# 2. Cannot remove if it's not in cart
-		# 3. Cannot remove a product which is not in grocery store
 		if product in self.cart:
 
 			current_quantity = self.cart.get(product)
