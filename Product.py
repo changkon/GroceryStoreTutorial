@@ -4,3 +4,7 @@ class Product:
 		self.name = name
 		self.price = price
 		self.quantity = quantity
+
+	def print(self):
+		# TODO
+		print("{}, {}, ${}, {}".format(self.id, self.name, self.price, self.quantity))

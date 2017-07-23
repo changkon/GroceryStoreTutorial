@@ -25,8 +25,9 @@ def initialise_stock():
 
 def initialise():
 	name = "OrionStore"
+	grocery_store_id = 1
 	stock = initialise_stock()
-	grocery_store = GroceryStore(name, stock)
+	grocery_store = GroceryStore(grocery_store_id, name, stock)
 	return grocery_store
 
 def start():
@@ -47,12 +48,45 @@ def start():
 		if user_input == "1":
 			grocery_store.print_available_products()
 		elif user_input == "2":
-			pass
+			while True:
+				print("1. Add an item to the shopping cart")
+				print("2. Delete an item from the shopping cart")
+				print("3. Check out the shopping cart")
+				print("4. Exit without buying")
+
+				user_input = input("Enter selection: ")
+
+				if user_input == "1":
+					product_id = input("Enter product id to buy: ")
+					quantity_amount = input("Enter quantity to purchase: ")
+
+					try:
+						product = grocery_store.get_product(int(product_id))
+						user.add_to_cart(product, int(quantity_amount))
+					except StopIteration:
+						print("Unknown product id")
+				elif user_input == "2":
+					product_id = input("Enter product id to remove: ")
+					quantity_amount = input("Enter quantity to remove: ")
+					try:
+						product = grocery_store.get_product(int(product_id))
+						user.remove_from_cart(product, int(quantity_amount))
+					except StopIteration:
+						print("Unknown product id")
+				elif user_input == "3":
+					if user.checkout():
+						break
+				elif user_input == "4":
+					user.clear()
+					break
+				else:
+					print("Invalid option, please try again!")
+
 		elif user_input == "3":
-			print("Bye")
+			print("Thank you for shopping with us!")
 			break
 		else:
-			print("Unknown command")
+			print("Invalid option, please try again!")
 
 if __name__ == "__main__":
 	start()
