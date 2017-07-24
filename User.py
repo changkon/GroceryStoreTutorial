@@ -1,5 +1,5 @@
 class User:
-	def __init__(self, name, balance, cart={}):
+	def __init__(self, name, balance, cart):
 		self.name = name
 		self.balance = balance
 		self.cart = cart
@@ -22,7 +22,7 @@ class User:
 		product.quantity -= quantity
 
 		# print added item
-		print("{} is added to the shopping cart".format(product.name))
+		print("{} {} is added to the shopping cart".format(quantity, product.name))
 
 	def remove_from_cart(self, product, quantity):
 		# TODO
@@ -44,32 +44,36 @@ class User:
 				self.cart[product] = new_quantity
 
 			product.quantity += quantity
-			print("{} is removed from the shopping cart".format(product.name))
+			print("{} {} is removed from the shopping cart".format(quantity, product.name))
 		else:
 			print('This item is not in the shopping cart')
 
 	def clear(self):
 		# TODO
 		# remove everything from cart
-		for product, quantity in self.cart.items():
-			self.remove_from_cart(product, quantity)
-
+		self.cart = {}
 		print("All items are cleared from the shopping cart")
 
 	def checkout(self):
 		# TODO
 		total_amount_due = 0
 		bill_output = ["Checking out items ..."]
-		for product, quantity in self.cart.items():
+
+		if len(self.cart.items()) == 0:
+			print("Cannot checkout empty cart")
+			return False
+
+		for product, quantity in sorted(self.cart.items(), key=lambda x: x[0].id):
 			amount_due = product.price * quantity
-			bill_output.append("{}/{}/${}".format(product.name, quantity, amount_due))
+			bill_output.append("{}/{}/${}".format(product.name, quantity, round(amount_due, 2)))
 			total_amount_due += amount_due
 
 		if total_amount_due > self.balance:
 			print('Insufficient funds to purchase item(s)')
-			print("${} required to purchase but current balance is ${}".format(total_amount_due, self.balance))
+			print("${} required to purchase but current balance is ${}".format(round(total_amount_due, 2), round(self.balance, 2)))
 			return False
 		else:
+			bill_output.append("Total amount due: ${}".format(round(total_amount_due, 2)))
 			print("\n".join(bill_output))
 			self.balance -= total_amount_due
 			return True

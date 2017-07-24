@@ -33,7 +33,7 @@ def initialise():
 def start():
 	starting_balance = 50
 	user_name = "Chang Kon"
-	user = User(user_name, starting_balance)
+	user = User(user_name, starting_balance, {})
 	grocery_store = initialise()
 
 	print("Welcome to " + grocery_store.name)
