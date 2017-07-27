@@ -273,7 +273,7 @@ class TestGroceryStore(unittest.TestCase):
 			garlic: 1
 		}
 		self.user.cart = cart
-
+		self.assertEquals(4, len(self.user.cart.items()))
 		result = None
 
 		# WHEN
@@ -283,5 +283,6 @@ class TestGroceryStore(unittest.TestCase):
 		output = out.getvalue().strip()
 		expected_output = "Checking out items ...\nFresh toast bread white/5/$19.95\nFresh garlic/1/$1.98\nBroccoli/3/$4.41\nChocolate block/2/$7.18\nTotal amount due: $33.52"
 		# THEN
+		self.assertEquals(0, len(self.user.cart.items()))
 		self.assertEqual(expected_output, output)
 		self.assertEqual(True, result)

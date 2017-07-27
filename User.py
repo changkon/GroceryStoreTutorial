@@ -76,4 +76,5 @@ class User:
 			bill_output.append("Total amount due: ${}".format(round(total_amount_due, 2)))
 			print("\n".join(bill_output))
 			self.balance -= total_amount_due
+			self.cart = {}
 			return True
