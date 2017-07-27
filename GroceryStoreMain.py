@@ -23,19 +23,25 @@ def initialise_stock():
 	stock.append(Product(17, 'Chocolate block', 3.59, 10))
 	return stock
 
-def initialise():
+def initialise_store():
 	name = "OrionStore"
 	grocery_store_id = 1
 	stock = initialise_stock()
 	grocery_store = GroceryStore(grocery_store_id, name, stock)
 	return grocery_store
 
-def start():
+def initialise_user():
 	starting_balance = 50
-	user_name = "Chang Kon"
+	# TODO change to May Lin Tye
+	user_name = "May Lin Tye"
 	user = User(user_name, starting_balance, {})
-	grocery_store = initialise()
+	return user
 
+def start():
+	user = initialise_user()
+	grocery_store = initialise_store()
+
+	print("Hello " + user.name)
 	print("Welcome to " + grocery_store.name)
 
 	while True:

@@ -18,10 +18,11 @@ def capture():
 class TestGroceryStore(unittest.TestCase):
 
 	def setUp(self):
-		self.grocery_store = GroceryStoreMain.initialise()
-		starting_balance = 50
-		user_name = "Chang Kon"
-		self.user = User(user_name, starting_balance, {})
+		self.grocery_store = GroceryStoreMain.initialise_store()
+		self.user = GroceryStoreMain.initialise_user()
+
+	def test_user_name(self):
+		self.assertEqual("May Lin Tye", self.user.name)
 
 	def test_product_print(self):
 		# GIVEN
