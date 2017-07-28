@@ -16,7 +16,7 @@ Files which require completion have **TODO** comments in the python file and are
 * **User.py** - User file which allows products/items to be added/removed from cart. **TODO**
 * **TestGroceryStore.py** - Use this test file to verify the correctness of your implemention.
 
-**Currently, the program will not function and requires completion.** Before beginning, it is advised understand all the files and how they interact. The methods have been commented to describe their purpose and the requirements of the tasks are described below.
+**Currently, the program will not function and requires completion.** Before beginning, it is advised to understand all the files and how they interact. The methods have been commented to describe their purpose and the requirements of the tasks are described below.
 
 ## Installation
 The software requires `python3` to run. If you haven't installed python3 yet, follow the below instructions to get started.
@@ -128,4 +128,87 @@ Update the `print_available_products` method inside `GroceryStore.py`. It should
 17, Chocolate block, $3.59, 10
 ```
 ### Add to cart
-Edit the `add_to_cart` method inside `User.py`
+Edit the `add_to_cart` method inside `User.py`. The method takes in product and quantity argument. Successful addition to the cart should update the cart dictionary variable. **Successful addition of a product into shopping cart should use the product as the key and its quantity as the value**.
+The method should handle the scenarios where:
+1. Can't add out of stock products
+2. Can't add more than what's available
+
+If the current product is out of stock. The software should display a message indicating that the **product id** is out of stock.
+```
+Enter product id to buy: 1
+Enter quantity to purchase: 1
+Sorry, item 1 is out of stock. Please select a different item
+```
+
+If the user tries to add more than what's currently available, the program should also display a message.
+```
+Enter product id to buy: 1
+Enter quantity to purchase: 25
+Cannot add more than what is available in stock
+```
+
+Successful addition should display the number of products successfully added to the cart. This should update the quantity of the product in the cart variable. Furthermore, the product quantity should be subtracted by the quantity amount.
+```
+Enter product id to buy: 1
+Enter quantity to purchase: 1
+1 Fresh toast bread white is added to the shopping cart
+```
+
+### Remove from cart
+Edit the `remove_from_cart` method inside `User.py`. The method takes in product and quantity argument. Successful removal from the cart should update the cart dictionary variable. Furthermore, the product quantity value should be increased after successful removal from cart.
+The method shuold handle the scenarios where:
+1. Cannot remove more than what's currently in the cart
+2. Cannot remove a product which is not in the cart
+
+If the user attempts to remove a product with a quantity value more than what is currently in the cart, the software should display a message.
+```
+Enter product id to remove: 1
+Enter quantity to remove: 3
+Cannot remove more than what is in the cart
+```
+
+If the user tries to remove a product which is not in the cart, the software should display a message.
+```
+Enter product id to remove: 5
+Enter quantity to remove: 1
+This item is not in the shopping cart
+```
+
+Successful removal from the cart should display the quantity of the product removed from the cart.
+```
+Enter product id to remove: 1
+Enter quantity to remove: 1
+1 Fresh toast bread white is removed from the shopping cart
+```
+
+### Clear the cart
+Edit the `clear` method inside `User.py`. This method clears the shopping cart and displays a message to the user. Clearing a cart works even if the shopping cart is already empty. Clearing the cart should restore the product quantity.
+```
+All items are cleared from the shopping cart
+```
+
+### Checkout
+Edit the `checkout` method inside `User.py`. Checkout attempts to checkout the shopping cart. Checkout should return a **boolean value** i.e. True or False. Checkout should handle these scenarios:
+1. Attempting to checkout an empty cart
+2. Insufficient funds to purchase items
+3. Successful checkout
+
+If the user attempts to checkout an empty cart, the program should display a message and return False.
+```
+Cannot checkout empty cart
+```
+
+If the user does not have sufficient funds to purchase what's currently in the cart, a message will be shown to the user and the method should return False. It displays the amount required to purchase the money and the current user balance. The money is prefixed with the `$` symbol and rounded to 2 d.p.
+```
+Insufficient funds to purchase item(s)
+$84.37 required to purchase but current balance is $50
+```
+
+If there is a successful checkout, a bill should be displayed to the user and the total amount due. The method returns True. The amount is prefixed with the `$` symbol and the rounded to 2 d.p.
+The bill is formatted to show its name, quantity purchased and the price. It is `/` i.e. forward slash separated. The total amount is summed and displayed at the bottom. Furthermore, the bill is sorted by its product id.
+```
+Checking out items ...
+Fresh toast bread white/3/$11.97
+Mango/1/$1.89
+Total amount due: $13.86
+```
