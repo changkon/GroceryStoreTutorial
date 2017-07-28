@@ -196,22 +196,23 @@ class TestGroceryStore(unittest.TestCase):
 		# GIVEN
 		milk = self.grocery_store.get_product(2)
 		broccoli = self.grocery_store.get_product(8)
-		cart = {
-			milk: 7,
-			broccoli: 4
-		}
-		self.user.cart = cart
-		self.assertEqual(2, len(self.user.cart))
 
 		# WHEN
 		with capture() as (out, err):
+			self.user.add_to_cart(milk, 7)
+			self.user.add_to_cart(broccoli, 4)
+			self.assertEqual(2, len(self.user.cart))
+			self.assertEqual(3, milk.quantity)
+			self.assertEqual(7, broccoli.quantity)
 			self.user.clear()
 
 		output = out.getvalue().strip()
-		expected_output = "All items are cleared from the shopping cart"
+		expected_output = "7 Low-fat milk is added to the shopping cart\n4 Broccoli is added to the shopping cart\nAll items are cleared from the shopping cart"
 		# THEN
 		self.assertEqual(expected_output, output)
 		self.assertEqual({}, self.user.cart)
+		self.assertEqual(10, milk.quantity)
+		self.assertEqual(11, broccoli.quantity)
 
 	def test_clear_on_empty_cart(self):
 		# GIVEN
@@ -274,7 +275,7 @@ class TestGroceryStore(unittest.TestCase):
 			garlic: 1
 		}
 		self.user.cart = cart
-		self.assertEquals(4, len(self.user.cart.items()))
+		self.assertEqual(4, len(self.user.cart.items()))
 		result = None
 
 		# WHEN
@@ -284,6 +285,6 @@ class TestGroceryStore(unittest.TestCase):
 		output = out.getvalue().strip()
 		expected_output = "Checking out items ...\nFresh toast bread white/5/$19.95\nFresh garlic/1/$1.98\nBroccoli/3/$4.41\nChocolate block/2/$7.18\nTotal amount due: $33.52"
 		# THEN
-		self.assertEquals(0, len(self.user.cart.items()))
+		self.assertEqual(0, len(self.user.cart.items()))
 		self.assertEqual(expected_output, output)
 		self.assertEqual(True, result)

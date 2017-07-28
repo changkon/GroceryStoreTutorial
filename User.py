@@ -50,6 +50,9 @@ class User:
 
 	def clear(self):
 		# TODO
+		# update quantities
+		for product, quantity in self.cart.items():
+			product.quantity += quantity
 		# remove everything from cart
 		self.cart = {}
 		print("All items are cleared from the shopping cart")

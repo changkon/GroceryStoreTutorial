@@ -88,6 +88,29 @@ Run the unit tests by `python3 -m unittest TestGroceryStore.py -v`
 
 All unit tests should pass for correct implementation of the program.
 
+```
+test_add_to_cart (TestGroceryStore.TestGroceryStore) ... ok
+test_add_to_cart_cannot_add_more_than_available_stock (TestGroceryStore.TestGroceryStore) ... ok
+test_add_to_cart_cannot_add_out_of_stock_product (TestGroceryStore.TestGroceryStore) ... ok
+test_checkout (TestGroceryStore.TestGroceryStore) ... ok
+test_checkout_is_insufficient (TestGroceryStore.TestGroceryStore) ... ok
+test_checkout_prints_bill_on_empty_cart (TestGroceryStore.TestGroceryStore) ... ok
+test_clear (TestGroceryStore.TestGroceryStore) ... ok
+test_clear_on_empty_cart (TestGroceryStore.TestGroceryStore) ... ok
+test_grocery_store_print_initial_products (TestGroceryStore.TestGroceryStore) ... ok
+test_grocery_store_print_products_does_not_print_out_of_stock_products (TestGroceryStore.TestGroceryStore) ... ok
+test_product_print (TestGroceryStore.TestGroceryStore) ... ok
+test_remove_from_cart (TestGroceryStore.TestGroceryStore) ... ok
+test_remove_from_cart_cannot_more_than_current_cart (TestGroceryStore.TestGroceryStore) ... ok
+test_remove_from_cart_cannot_remove_product_not_in_cart (TestGroceryStore.TestGroceryStore) ... ok
+test_user_name (TestGroceryStore.TestGroceryStore) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.001s
+
+OK
+```
+
 ## Tasks
 ### Changing user name
 Change the `GroceryStoreMain.py` file and edit `user_name` variable inside the `initialise_user` method. Change it to your name `May Lin Tye`.
