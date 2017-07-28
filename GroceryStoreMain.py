@@ -33,7 +33,7 @@ def initialise_store():
 def initialise_user():
 	starting_balance = 50
 	# TODO change to May Lin Tye
-	user_name = "May Lin Tye"
+	user_name = "TestUser"
 	user = User(user_name, starting_balance, {})
 	return user
 

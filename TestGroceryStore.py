@@ -22,7 +22,7 @@ class TestGroceryStore(unittest.TestCase):
 		self.user = GroceryStoreMain.initialise_user()
 
 	def test_user_name(self):
-		self.assertEqual("May Lin Tye", self.user.name)
+		self.assertEqual("May Lin Tye", self.user.name, "Incorrect username")
 
 	def test_product_print(self):
 		# GIVEN

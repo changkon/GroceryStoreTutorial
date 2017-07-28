@@ -111,6 +111,8 @@ Ran 15 tests in 0.001s
 OK
 ```
 
+Failed tests should show a message.
+
 ## Tasks
 ### Changing user name
 Change the `GroceryStoreMain.py` file and edit `user_name` variable inside the `initialise_user` method. Change it to your name `May Lin Tye`.
@@ -130,7 +132,7 @@ Update the `print` method inside `Product.py`. It should print i.e. display into
 ```
 
 ### Print grocery store stock
-Update the `print_available_products` method inside `GroceryStore.py`. It should display **current available i.e. quantity is 1 or greater** products. Each product should show its product information. The products are sorted by its product id. Example:
+Update the `print_available_products` method inside `GroceryStore.py`. It should display **currently available products i.e. quantity is 1 or greater**. Each product should show its product information. The products are sorted by its product id. Example:
 ```
 1, Fresh toast bread white, $3.99, 20
 2, Low-fat milk, $4.8, 10
@@ -179,7 +181,7 @@ Enter quantity to purchase: 1
 
 ### Remove from cart
 Edit the `remove_from_cart` method inside `User.py`. The method takes in product and quantity argument. Successful removal from the cart should update the cart dictionary variable. Furthermore, the product quantity value should be increased after successful removal from cart.
-The method shuold handle the scenarios where:
+The method should handle the scenarios where:
 1. Cannot remove more than what's currently in the cart
 2. Cannot remove a product which is not in the cart
 
@@ -227,8 +229,8 @@ Insufficient funds to purchase item(s)
 $84.37 required to purchase but current balance is $50
 ```
 
-If there is a successful checkout, a bill should be displayed to the user and the total amount due. The method returns True. The amount is prefixed with the `$` symbol and the rounded to 2 d.p.
-The bill is formatted to show its name, quantity purchased and the price. It is `/` i.e. forward slash separated. The total amount is summed and displayed at the bottom. Furthermore, the bill is sorted by its product id.
+If there is a successful checkout, a bill should be displayed to the user and the total amount due. The method returns True. The amount is prefixed with the `$` symbol and rounded to 2 d.p.
+The bill is formatted to show its name, quantity purchased and the price. It is `/` i.e. forward slash separated. The total amount is summed and displayed at the bottom and subtracted from the users current `balance` variable. Furthermore, the bill is sorted by its product id.
 ```
 Checking out items ...
 Fresh toast bread white/3/$11.97
