@@ -5,6 +5,11 @@ class Product:
 		self.price = price
 		self.quantity = quantity
 
+
 	def print(self):
-		# TODO
+		"""
+		TODO
+		Formatted display of product information should show id, name, $price, quantity
+		:return: prints a formatted string which displays product information
+		"""
 		print("{}, {}, ${}, {}".format(self.id, self.name, self.price, self.quantity))

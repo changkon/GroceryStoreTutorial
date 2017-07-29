@@ -10,7 +10,11 @@ class GroceryStore:
 		return product
 
 	def print_available_products(self):
-		# TODO
+		"""
+		TODO
+		Prints product information for available stock. Printing is sorted by its id value descending.
+		:return: prints formatted product information sorted by id descending
+		"""
 		available_stock = filter(lambda x: x.quantity > 0, self.stock)
 		available_stock_sorted = sorted(available_stock, key=lambda x: x.id)
 		for stock in available_stock_sorted:
