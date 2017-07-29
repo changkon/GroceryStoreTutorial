@@ -35,7 +35,7 @@ class TestGroceryStore(unittest.TestCase):
 		output = out.getvalue().strip()
 		expected_output = "1, Fresh toast bread white, $3.99, 20"
 		# THEN
-		self.assertEqual(expected_output, output)
+		self.assertEqual(expected_output, output, "Product print is in incorrect format. Should be id, name, price, quantity")
 
 	def test_grocery_store_print_initial_products(self):
 		# WHEN
@@ -63,7 +63,7 @@ class TestGroceryStore(unittest.TestCase):
 			"17, Chocolate block, $3.59, 10"
 			]
 		# THEN
-		self.assertEqual("\n".join(expected_output), output)
+		self.assertEqual("\n".join(expected_output), output, "Incorrect printing of grocery stock")
 
 	def test_grocery_store_print_products_does_not_print_out_of_stock_products(self):
 		# GIVEN
@@ -112,11 +112,15 @@ class TestGroceryStore(unittest.TestCase):
 		output = out.getvalue().strip()
 		expected_output = "Sorry, item 1 is out of stock. Please select a different item"
 		# THEN
-		self.assertEqual(expected_output, output)
+		self.assertEqual(expected_output, output, "Printing doesn't show item is out of stock")
+		self.assertEqual(0, bread.quantity, "Bread quantity should be unaffected")
+		self.assertEqual(0, len(self.user.cart.items()), "User should have empty cart")
 
 	def test_add_to_cart_cannot_add_more_than_available_stock(self):
 		# GIVEN
 		bread = self.grocery_store.get_product(1)
+		self.assertEqual(20, bread.quantity)
+
 		# WHEN
 		with capture() as (out, err):
 			self.user.add_to_cart(bread, bread.quantity + 1)
@@ -126,11 +130,16 @@ class TestGroceryStore(unittest.TestCase):
 
 		# THEN
 		self.assertEqual(expected_output, output)
+		self.assertEqual(20, bread.quantity, "Bread quantity should be unaffected")
+		self.assertEqual(0, len(self.user.cart.items()), "User should have empty cart")
 
 	def test_add_to_cart(self):
 		# GIVEN
 		bread = self.grocery_store.get_product(1)
 		milk = self.grocery_store.get_product(2)
+
+		self.assertEqual(20, bread.quantity)
+		self.assertEqual(10, milk.quantity)
 
 		# WHEN
 		with capture() as (out, err):
@@ -141,17 +150,21 @@ class TestGroceryStore(unittest.TestCase):
 		expected_output = "1 Fresh toast bread white is added to the shopping cart\n5 Low-fat milk is added to the shopping cart"
 		# THEN
 		self.assertEqual(expected_output, output)
-		self.assertEqual(2, len(self.user.cart.items()))
-		self.assertEqual(1, self.user.cart.get(bread))
-		self.assertEqual(5, self.user.cart.get(milk))
+		self.assertEqual(2, len(self.user.cart.items()), "User cart should have two items")
+		self.assertEqual(1, self.user.cart.get(bread), "User cart should have bread item")
+		self.assertEqual(5, self.user.cart.get(milk), "User cart should have milk item")
+		self.assertEqual(19, bread.quantity, "Bread quantity should decrease")
+		self.assertEqual(5, milk.quantity, "Milk quantity should decrease")
 
 	def test_remove_from_cart_cannot_more_than_current_cart(self):
 		# GIVEN
-		potato = self.grocery_store.get_product(10)
+		potato = self.grocery_store.get_product(9)
 		cart = {
 			potato: 3
 		}
 		self.user.cart = cart
+		potato.quantity -= 3
+		self.assertEqual(4, potato.quantity)
 
 		# WHEN
 		with capture() as (out, err):
@@ -161,6 +174,8 @@ class TestGroceryStore(unittest.TestCase):
 		expected_output = "Cannot remove more than what is in the cart"
 		# THEN
 		self.assertEqual(expected_output, output)
+		self.assertEqual(3, self.user.cart.get(potato), "User cart should remain unchanged")
+		self.assertEqual(4, potato.quantity, "Potato quantity should remain unchanged")
 
 	def test_remove_from_cart_cannot_remove_product_not_in_cart(self):
 		# WHEN
@@ -180,7 +195,11 @@ class TestGroceryStore(unittest.TestCase):
 			chocolate: 2,
 			lettuce: 4
 		}
+		chocolate.quantity -= 2
+		lettuce.quantity -= 4
 		self.user.cart = cart
+		self.assertEqual(8, chocolate.quantity)
+		self.assertEqual(8, lettuce.quantity)
 
 		# WHEN
 		with capture() as (out, err):
@@ -191,23 +210,36 @@ class TestGroceryStore(unittest.TestCase):
 		expected_output = "2 Chocolate block is removed from the shopping cart\n3 Lettuce is removed from the shopping cart"
 		# THEN
 		self.assertEqual(expected_output, output)
+		self.assertEqual(10, chocolate.quantity, "Chocolate quantity should increase")
+		self.assertEqual(False, chocolate in self.user.cart)
+		self.assertEqual(11, lettuce.quantity)
+		self.assertEqual(1, self.user.cart.get(lettuce))
 
 	def test_clear(self):
 		# GIVEN
 		milk = self.grocery_store.get_product(2)
 		broccoli = self.grocery_store.get_product(8)
 
+		milk.quantity -= 7
+		broccoli.quantity -= 4
+
+		cart = {
+			milk: 7,
+			broccoli: 4
+		}
+
+		self.user.cart = cart
+
+		self.assertEqual(2, len(self.user.cart))
+		self.assertEqual(3, milk.quantity)
+		self.assertEqual(7, broccoli.quantity)
+
 		# WHEN
 		with capture() as (out, err):
-			self.user.add_to_cart(milk, 7)
-			self.user.add_to_cart(broccoli, 4)
-			self.assertEqual(2, len(self.user.cart))
-			self.assertEqual(3, milk.quantity)
-			self.assertEqual(7, broccoli.quantity)
 			self.user.clear()
 
 		output = out.getvalue().strip()
-		expected_output = "7 Low-fat milk is added to the shopping cart\n4 Broccoli is added to the shopping cart\nAll items are cleared from the shopping cart"
+		expected_output = "All items are cleared from the shopping cart"
 		# THEN
 		self.assertEqual(expected_output, output)
 		self.assertEqual({}, self.user.cart)
@@ -226,6 +258,7 @@ class TestGroceryStore(unittest.TestCase):
 		expected_output = "All items are cleared from the shopping cart"
 		# THEN
 		self.assertEqual(expected_output, output)
+		self.assertEqual({}, self.user.cart)
 
 	def test_checkout_is_insufficient(self):
 		# GIVEN
@@ -236,7 +269,13 @@ class TestGroceryStore(unittest.TestCase):
 			bread: 13,
 			garlic: 5
 		}
+		bread.quantity -= 13
+		garlic.quantity -= 5
 		self.user.cart = cart
+		self.assertEqual(7, bread.quantity)
+		self.assertEqual(0, garlic.quantity)
+		self.assertEqual(50, self.user.balance)
+
 		result = None
 		# WHEN
 		with capture() as (out, err):
@@ -248,6 +287,11 @@ class TestGroceryStore(unittest.TestCase):
 		# THEN
 		self.assertEqual(expected_output, output)
 		self.assertEqual(False, result)
+		self.assertEqual(7, bread.quantity, "Bread quantity should remain unchanged")
+		self.assertEqual(0, garlic.quantity, "Garlic quantity should remain unchanged")
+		self.assertEqual(13, self.user.cart.get(bread), "Bread cart quantity should remain unchanged")
+		self.assertEqual(5, self.user.cart.get(garlic), "Garlic cart quantity should remain unchanged")
+		self.assertEqual(50, self.user.balance, "Balance should remain unchanged")
 
 	def test_checkout_prints_bill_on_empty_cart(self):
 		# GIVEN
@@ -274,6 +318,10 @@ class TestGroceryStore(unittest.TestCase):
 			broccoli: 3,
 			garlic: 1
 		}
+		chocolate.quantity -= 2
+		bread.quantity -= 5
+		broccoli.quantity -= 3
+		garlic.quantity -= 1
 		self.user.cart = cart
 		self.assertEqual(4, len(self.user.cart.items()))
 		result = None
@@ -284,7 +332,9 @@ class TestGroceryStore(unittest.TestCase):
 
 		output = out.getvalue().strip()
 		expected_output = "Checking out items ...\nFresh toast bread white/5/$19.95\nFresh garlic/1/$1.98\nBroccoli/3/$4.41\nChocolate block/2/$7.18\nTotal amount due: $33.52"
+		expected_amount_due = 2 * chocolate.price + 5 * bread.price + 3 * broccoli.price + 1 * garlic.price
 		# THEN
 		self.assertEqual(0, len(self.user.cart.items()))
 		self.assertEqual(expected_output, output)
 		self.assertEqual(True, result)
+		self.assertEqual(50 - expected_amount_due, self.user.balance)

@@ -13,7 +13,7 @@ def initialise_stock():
 	stock.append(Product(7, 'Snickers chocolate bar', 1.80, 20))
 	stock.append(Product(8, 'Broccoli', 1.47, 11))
 	stock.append(Product(9, 'Washed Potato', 2.98, 7))
-	stock.append(Product(10, 'Good-morning cereal', 5.60 ,10))
+	stock.append(Product(10, 'Good-morning cereal', 5.60, 10))
 	stock.append(Product(11, 'Rose apple', 4.98, 5))
 	stock.append(Product(12, 'Avocado', 4.99, 5))
 	stock.append(Product(13, 'Bananas', 2.96, 4))
